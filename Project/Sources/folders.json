@@ -1,0 +1,61 @@
+{
+	"API": {
+		"groups": [
+			"Default",
+			"Progress"
+		],
+		"methods": [
+			"s3_delete",
+			"s3_download_blob",
+			"s3_download_path",
+			"s3_get_last_error",
+			"s3_list",
+			"s3_option",
+			"s3_upload_blob",
+			"s3_upload_path"
+		]
+	},
+	"Common": {
+		"methods": [
+			"calcAmazDateStr",
+			"delay",
+			"getAmzDate",
+			"getAuthorizationHeader",
+			"getCanonical",
+			"getSigningKey",
+			"getUploadId",
+			"hexToBlob",
+			"hexToDec",
+			"isRetryHttpCode",
+			"normalizeQueryString",
+			"parseXml",
+			"separateData",
+			"separateData1",
+			"sigingKey",
+			"signedRequest",
+			"sortElementInObject",
+			"uriEncode",
+			"uriEncodeExceptSlash"
+		]
+	},
+	"Default": {
+		"methods": [
+			"cast"
+		]
+	},
+	"OnError": {
+		"methods": [
+			"onErrCast",
+			"onErrMethod",
+			"onErrMethod_p"
+		]
+	},
+	"Progress": {
+		"methods": [
+			"s3_progress",
+			"s3_progress_set",
+			"s3_progress_set_p"
+		]
+	},
+	"trash": {}
+}
