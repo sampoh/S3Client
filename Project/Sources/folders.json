@@ -32,8 +32,6 @@
 			"isRetryHttpCode",
 			"normalizeQueryString",
 			"parseXml",
-			"separateData",
-			"separateData1",
 			"sigingKey",
 			"signedRequest",
 			"sortElementInObject",
