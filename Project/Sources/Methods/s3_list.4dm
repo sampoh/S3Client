@@ -29,39 +29,53 @@ var $request : Object
 var $emptyBlob : Blob
 var $queryString : Text
 
-$params:=$1
-
-If (Count parameters:C259>=2)
-	$prefix:=$2
-End if 
-
-If (Count parameters:C259>=3)
-	$continuationToken:=$3
-End if 
-
-$path:="/"+$params.bucket
-
-$queryString:=uriEncode("list-type")+"=2"
-If ($prefix#"")
-	$queryString:=$queryString+"&prefix="+uriEncode($prefix)
-End if 
-If ($continuationToken#"")
-	$queryString:=$queryString+"&"+uriEncode("continuation-token")+"="+uriEncode($continuationToken)
-End if 
-
-$request:=signedRequest($params; "GET"; $path; $emptyBlob; $queryString)
-
 $result:=New object:C1471
-$result.success:=($request.response.status=200)
-$result.request:=$request
-$result.nextContinuationToken:=""
-$result.data:=New object:C1471
-If ($result.success)
-	$result.data:=parseXml($request.response.body)
-	$result.nextContinuationToken:=$result.data.nextContinuationToken
-End if 
 
-$result.error:=err
+If (Count parameters:C259>=1)
+	
+	$params:=$1
+	
+	If (Count parameters:C259>=2)
+		$prefix:=$2
+	End if 
+	
+	If (Count parameters:C259>=3)
+		$continuationToken:=$3
+	End if 
+	
+	$path:="/"+$params.bucket
+	
+	$queryString:=uriEncode("list-type")+"=2"
+	If ($prefix#"")
+		$queryString:=$queryString+"&prefix="+uriEncode($prefix)
+	End if 
+	If ($continuationToken#"")
+		$queryString:=$queryString+"&"+uriEncode("continuation-token")+"="+uriEncode($continuationToken)
+	End if 
+	
+	$request:=signedRequest($params; "GET"; $path; $emptyBlob; $queryString)
+	
+	$result.success:=($request.response.status=200)
+	$result.request:=$request
+	$result.nextContinuationToken:=""
+	$result.data:=New object:C1471
+	If ($result.success)
+		$result.data:=parseXml($request.response.body)
+		$result.nextContinuationToken:=$result.data.nextContinuationToken
+	End if 
+	
+	$result.error:=err
+	
+Else 
+	$result.success:=False:C215
+	$result.request:=New object:C1471
+	$result.nextContinuationToken:=""
+	$result.data:=New object:C1471
+	$result.error:=New object:C1471
+	$result.error.errCode:=-1
+	$result.error.info:="第1引数は必須です。"
+	$result.error.lastErrors:=New collection:C1472
+End if 
 
 $0:=$result
 

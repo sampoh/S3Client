@@ -20,16 +20,28 @@ var $1; $params : Object
 var $path : Text
 var $request : Object
 
-$params:=$1
-
-$path:="/"+$params.bucket+"/"+$params.key
-
-$request:=signedRequest($params; "DELETE"; $path)
-
 $result:=New object:C1471
-$result.success:=($request.response.status=204)
-$result.request:=$request
-$result.error:=err
+
+If (Count parameters:C259>=1)
+	
+	$params:=$1
+	
+	$path:="/"+$params.bucket+"/"+$params.key
+	
+	$request:=signedRequest($params; "DELETE"; $path)
+	
+	$result.success:=($request.response.status=204)
+	$result.request:=$request
+	$result.error:=err
+	
+Else 
+	$result.success:=False:C215
+	$result.request:=New object:C1471
+	$result.error:=New object:C1471
+	$result.error.errCode:=-1
+	$result.error.info:="第1引数は必須です。"
+	$result.error.lastErrors:=New collection:C1472
+End if 
 
 $0:=$result
 

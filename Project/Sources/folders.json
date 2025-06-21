@@ -9,6 +9,7 @@
 			"s3_download_blob",
 			"s3_download_path",
 			"s3_get_last_error",
+			"s3_head",
 			"s3_list",
 			"s3_option",
 			"s3_upload_blob",
@@ -18,6 +19,8 @@
 	"Common": {
 		"methods": [
 			"calcAmazDateStr",
+			"convertDateStr",
+			"convertUtcToJst",
 			"delay",
 			"getAmzDate",
 			"getAuthorizationHeader",
