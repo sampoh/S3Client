@@ -1,12 +1,12 @@
 //%attributes = {}
 //スラッシュ以外をURLエンコード
 
+var $0; $OUT : Text
 var $1; $IN : Text
 
 var $preArr : Collection
 var $encodedArr : Collection
 var $ONE : Text
-var $OUT : Text
 
 $IN:=$1
 
