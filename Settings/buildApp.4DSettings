@@ -30,7 +30,7 @@
       <HardLink></HardLink>
     </CS>
     <BuildApplicationName>S3Client</BuildApplicationName>
-    <BuildWinDestFolder>..\S3Client_Build</BuildWinDestFolder>
+    <BuildWinDestFolder>..\S3Client_Build\</BuildWinDestFolder>
     <ArrayExcludedPluginName>
       <ItemsCount>0</ItemsCount>
     </ArrayExcludedPluginName>
