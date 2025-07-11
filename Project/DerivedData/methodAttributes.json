@@ -1,145 +1,148 @@
 {
 	"methods": {
 		"calcAmazDateStr": {
-			"timeStamp": "2025-06-19T11:07:21.446Z"
+			"timeStamp": "2025-06-19T11:07:21Z"
 		},
 		"cast": {
-			"timeStamp": "2025-06-20T11:27:59.974Z"
+			"timeStamp": "2025-06-20T11:27:59Z"
 		},
 		"convertDateStr": {
-			"timeStamp": "2025-06-21T08:10:15.352Z"
+			"timeStamp": "2025-06-21T08:10:15Z"
 		},
 		"convertUtcToJst": {
-			"timeStamp": "2025-06-21T08:48:54.252Z"
+			"timeStamp": "2025-06-21T08:48:54Z"
 		},
 		"delay": {
-			"timeStamp": "2025-06-20T08:11:41.681Z"
+			"timeStamp": "2025-06-20T08:11:41Z"
 		},
 		"fixPartSize": {
-			"timeStamp": "2025-07-11T00:20:29.578Z"
+			"timeStamp": "2025-07-11T00:35:57Z"
 		},
 		"getAmzDate": {
-			"timeStamp": "2025-06-20T07:39:53.936Z"
+			"timeStamp": "2025-06-20T07:39:53Z"
 		},
 		"getAuthorizationHeader": {
-			"timeStamp": "2025-06-20T06:31:59.479Z"
+			"timeStamp": "2025-06-20T06:31:59Z"
 		},
 		"getCanonical": {
-			"timeStamp": "2025-06-19T11:47:37.539Z"
+			"timeStamp": "2025-06-19T11:47:37Z"
+		},
+		"getDocumentSize": {
+			"timeStamp": "2025-07-11T09:31:53Z"
 		},
 		"getSigningKey": {
-			"timeStamp": "2025-06-20T03:55:52.585Z"
+			"timeStamp": "2025-06-20T03:55:52Z"
 		},
 		"getUploadId": {
-			"timeStamp": "2025-06-20T05:55:26.786Z"
+			"timeStamp": "2025-06-20T05:55:26Z"
 		},
 		"hexToBlob": {
-			"timeStamp": "2025-06-19T11:42:31.767Z"
+			"timeStamp": "2025-06-19T11:42:31Z"
 		},
 		"hexToDec": {
-			"timeStamp": "2025-06-19T11:42:44.824Z"
+			"timeStamp": "2025-06-19T11:42:44Z"
 		},
 		"isRetryHttpCode": {
-			"timeStamp": "2025-06-20T08:40:21.239Z"
+			"timeStamp": "2025-06-20T08:40:21Z"
 		},
 		"normalizeQueryString": {
-			"timeStamp": "2025-06-20T03:36:35.857Z"
+			"timeStamp": "2025-06-20T03:36:35Z"
 		},
 		"onErrCast": {
-			"timeStamp": "2025-06-20T12:52:30.355Z"
+			"timeStamp": "2025-06-20T12:52:30Z"
 		},
 		"onErrMethod": {
-			"timeStamp": "2025-06-20T12:54:04.865Z"
+			"timeStamp": "2025-06-20T12:54:04Z"
 		},
 		"onErrMethod_p": {
-			"timeStamp": "2025-06-20T12:53:31.418Z"
+			"timeStamp": "2025-06-20T12:53:31Z"
 		},
 		"parseXml": {
-			"timeStamp": "2025-06-20T10:06:42.817Z"
+			"timeStamp": "2025-06-20T10:06:42Z"
 		},
 		"s3_delete": {
-			"timeStamp": "2025-06-21T07:30:51.001Z",
+			"timeStamp": "2025-06-21T07:30:51Z",
 			"attributes": {
 				"shared": true
 			}
 		},
 		"s3_download_blob": {
-			"timeStamp": "2025-06-21T07:30:34.083Z",
+			"timeStamp": "2025-06-21T07:30:34Z",
 			"attributes": {
 				"shared": true
 			}
 		},
 		"s3_download_path": {
-			"timeStamp": "2025-06-21T07:30:20.660Z",
+			"timeStamp": "2025-06-21T07:30:20Z",
 			"attributes": {
 				"shared": true
 			}
 		},
 		"s3_get_last_error": {
-			"timeStamp": "2025-06-21T07:24:16.146Z",
+			"timeStamp": "2025-06-21T07:24:16Z",
 			"attributes": {
 				"shared": true
 			}
 		},
 		"s3_head": {
-			"timeStamp": "2025-06-21T08:57:46.796Z",
+			"timeStamp": "2025-06-21T08:57:46Z",
 			"attributes": {
 				"shared": true
 			}
 		},
 		"s3_list": {
-			"timeStamp": "2025-06-21T07:32:13.781Z",
+			"timeStamp": "2025-06-21T07:32:13Z",
 			"attributes": {
 				"shared": true
 			}
 		},
 		"s3_option": {
-			"timeStamp": "2025-06-20T12:35:02.030Z",
+			"timeStamp": "2025-06-20T12:35:02Z",
 			"attributes": {
 				"shared": true
 			}
 		},
 		"s3_progress": {
-			"timeStamp": "2025-06-20T12:36:04.824Z",
+			"timeStamp": "2025-06-20T12:36:04Z",
 			"attributes": {
 				"shared": true
 			}
 		},
 		"s3_progress_set": {
-			"timeStamp": "2025-06-20T12:36:20.025Z",
+			"timeStamp": "2025-06-20T12:36:20Z",
 			"attributes": {
 				"shared": true
 			}
 		},
 		"s3_progress_set_p": {
-			"timeStamp": "2025-06-20T11:12:14.329Z"
+			"timeStamp": "2025-06-20T11:12:14Z"
 		},
 		"s3_upload_blob": {
-			"timeStamp": "2025-07-11T00:21:27.499Z",
+			"timeStamp": "2025-07-11T09:49:53Z",
 			"attributes": {
 				"shared": true
 			}
 		},
 		"s3_upload_path": {
-			"timeStamp": "2025-07-11T00:21:23.450Z",
+			"timeStamp": "2025-07-11T09:49:34Z",
 			"attributes": {
 				"shared": true
 			}
 		},
 		"sigingKey": {
-			"timeStamp": "2025-06-19T11:43:12.016Z"
+			"timeStamp": "2025-06-19T11:43:12Z"
 		},
 		"signedRequest": {
-			"timeStamp": "2025-06-20T04:19:37.655Z"
+			"timeStamp": "2025-06-20T04:19:37Z"
 		},
 		"sortElementInObject": {
-			"timeStamp": "2025-06-20T05:47:32.388Z"
+			"timeStamp": "2025-06-20T05:47:32Z"
 		},
 		"uriEncode": {
-			"timeStamp": "2025-06-20T06:06:57.211Z"
+			"timeStamp": "2025-06-20T06:06:57Z"
 		},
 		"uriEncodeExceptSlash": {
-			"timeStamp": "2025-06-21T10:40:42.408Z"
+			"timeStamp": "2025-06-21T10:40:42Z"
 		}
 	}
 }

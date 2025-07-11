@@ -32,7 +32,7 @@ var $def : Object
 var $fileSize : Real
 var $i; $sizeI; $partNum; $count : Integer
 var $queryString : Text
-var $FLG_ERROR; $FLG_SUCCESS : Boolean
+var $FLG_MULTIPART; $FLG_ERROR; $FLG_SUCCESS : Boolean
 var $buffer : Blob
 var $bufferSize : Real
 var $bufferSizeUploaded : Real
@@ -73,119 +73,137 @@ If (Count parameters:C259>=1)
 	
 	$path:="/"+$params.bucket+"/"+$params.key
 	
-	//マルチパート開始宣言リクエスト
-	$request:=signedRequest($params; "POST"; $path; $emptyBlob; "uploads"; New object:C1471("Content-Type"; $contentType))
+	$fileSize:=BLOB size:C605($2)
 	
-	If ($request.response.status=200)
-		$resBody:=Convert to text:C1012($request.response.body; "UTF-8")
-		$uploadId:=getUploadId($resBody)
-	End if 
+	$FLG_MULTIPART:=($fileSize>(10*1024*1024))  //10MB以上のみ分割アップロード
 	
-	$def:=cast
-	$partSize:=$def.partSize
-	
-	$etags:=New collection:C1472
-	$FLG_ERROR:=False:C215
-	$FLG_SUCCESS:=False:C215
-	
-	$retry:=New object:C1471
-	$retry.retry:=0  //処理全体を通したリトライ回数カウント
-	$retry.retryEach:=0  //個別の通信ごとのリトライ回数カウント
-	
-	If ($uploadId#"")
+	If ($FLG_MULTIPART)
 		
-		$fileSize:=BLOB size:C605($2)
-		$partSize:=fixPartSize($partSize; $fileSize)  //S3 APIの制限に合わせて分割サイズを調整
+		//マルチパート開始宣言リクエスト
+		$request:=signedRequest($params; "POST"; $path; $emptyBlob; "uploads"; New object:C1471("Content-Type"; $contentType))
 		
-		$count:=Trunc:C95($fileSize/$partSize; 0)
-		If (($fileSize%$partSize)>0)
-			$count:=$count+1
+		If ($request.response.status=200)
+			$resBody:=Convert to text:C1012($request.response.body; "UTF-8")
+			$uploadId:=getUploadId($resBody)
 		End if 
 		
-		$bufferSizeUploaded:=0
-		CLEAR VARIABLE:C89($buffer)
+		$def:=cast
+		$partSize:=$def.partSize
 		
-		$sizeI:=$count-1
-		For ($i; 0; $sizeI)
+		$etags:=New collection:C1472
+		$FLG_ERROR:=False:C215
+		$FLG_SUCCESS:=False:C215
+		
+		$retry:=New object:C1471
+		$retry.retry:=0  //処理全体を通したリトライ回数カウント
+		$retry.retryEach:=0  //個別の通信ごとのリトライ回数カウント
+		
+		If ($uploadId#"")
 			
-			$partNum:=$i+1
-			$queryString:="partNumber="+String:C10($partNum)+"&uploadId="+uriEncode($uploadId)
+			$partSize:=fixPartSize($partSize; $fileSize)  //S3 APIの制限に合わせて分割サイズを調整
 			
-			$offset:=$i*$partSize
-			CLEAR VARIABLE:C89($buffer)
-			$isLast:=($i=$sizeI)
-			If ($isLast)
-				$lastSize:=BLOB size:C605($2)-($sizeI*$partSize)
-				COPY BLOB:C558($2; $buffer; $offset; 0; $lastSize)
-			Else 
-				COPY BLOB:C558($2; $buffer; $offset; 0; $partSize)
+			$count:=Trunc:C95($fileSize/$partSize; 0)
+			If (($fileSize%$partSize)>0)
+				$count:=$count+1
 			End if 
 			
-			$bufferSize:=BLOB size:C605($buffer)
-			$bufferSizeUploaded:=$bufferSizeUploaded+$bufferSize
+			$bufferSizeUploaded:=0
+			CLEAR VARIABLE:C89($buffer)
 			
-			$retry.retryEach:=0
-			
-			Repeat 
+			$sizeI:=$count-1
+			For ($i; 0; $sizeI)
 				
-				//マルチパートアップロード
-				$request:=signedRequest($params; "PUT"; $path; $buffer; $queryString; New object:C1471(\
-					"Content-Length"; BLOB size:C605($buffer)))
+				$partNum:=$i+1
+				$queryString:="partNumber="+String:C10($partNum)+"&uploadId="+uriEncode($uploadId)
 				
-				$NEXT_STEP:=Not:C34(isRetryHttpCode($request.response.status))
-				
-				If (Not:C34($NEXT_STEP))
-					
-					If (\
-						($retry.retry>=$def.upload.retry) | \
-						($retry.retryEach>=$def.upload.maxRetryEach))
-						$NEXT_STEP:=True:C214
-						$FLG_ERROR:=True:C214
-						$i:=$sizeI+1
-					Else 
-						$retry.retry:=$retry.retry+1
-						$retry.retryEach:=$retry.retryEach+1
-						delay($def.upload.retryWait)
-					End if 
-					
+				$offset:=$i*$partSize
+				CLEAR VARIABLE:C89($buffer)
+				$isLast:=($i=$sizeI)
+				If ($isLast)
+					$lastSize:=BLOB size:C605($2)-($sizeI*$partSize)
+					COPY BLOB:C558($2; $buffer; $offset; 0; $lastSize)
+				Else 
+					COPY BLOB:C558($2; $buffer; $offset; 0; $partSize)
 				End if 
 				
-			Until ($NEXT_STEP)
+				$bufferSize:=BLOB size:C605($buffer)
+				$bufferSizeUploaded:=$bufferSizeUploaded+$bufferSize
+				
+				$retry.retryEach:=0
+				
+				Repeat 
+					
+					//マルチパートアップロード
+					$request:=signedRequest($params; "PUT"; $path; $buffer; $queryString; New object:C1471(\
+						"Content-Length"; BLOB size:C605($buffer)))
+					
+					$NEXT_STEP:=Not:C34(isRetryHttpCode($request.response.status))
+					
+					If (Not:C34($NEXT_STEP))
+						
+						If (\
+							($retry.retry>=$def.upload.retry) | \
+							($retry.retryEach>=$def.upload.maxRetryEach))
+							$NEXT_STEP:=True:C214
+							$FLG_ERROR:=True:C214
+							$i:=$sizeI+1
+						Else 
+							$retry.retry:=$retry.retry+1
+							$retry.retryEach:=$retry.retryEach+1
+							delay($def.upload.retryWait)
+						End if 
+						
+					End if 
+					
+				Until ($NEXT_STEP)
+				
+				CLEAR VARIABLE:C89($buffer)
+				
+				If ($request.response.status=200)
+					//OK
+					$etag:=Replace string:C233($request.response.headers["etag"]; "\""; "")
+					$etags.push(New object:C1471("PartNumber"; $partNum; "ETag"; $etag))
+					
+					$percentile:=$bufferSizeUploaded/$fileSize
+					s3_progress_set($percentile)
+					
+				Else 
+					//NG
+					$FLG_ERROR:=True:C214
+					$i:=$sizeI+1
+				End if 
+				
+			End for 
 			
-			CLEAR VARIABLE:C89($buffer)
+		End if 
+		
+		If (Not:C34($FLG_ERROR))
+			
+			$completeXml:="<CompleteMultipartUpload>"+\
+				$etags.map(Formula:C1597("<Part><PartNumber>"+String:C10($1.value.PartNumber)+"</PartNumber><ETag>"+$1.value.ETag+"</ETag></Part>")).join("")+\
+				"</CompleteMultipartUpload>"
+			
+			CONVERT FROM TEXT:C1011($completeXml; "utf-8"; $completeBlob)
+			
+			$queryString:="uploadId="+uriEncode($uploadId)
+			
+			//マルチパート完了
+			$request:=signedRequest($params; "POST"; $path; $completeBlob; $queryString; New object:C1471(\
+				"Content-Type"; "application/xml"; \
+				"Content-Length"; BLOB size:C605($completeBlob)))
 			
 			If ($request.response.status=200)
 				//OK
-				$etag:=Replace string:C233($request.response.headers["etag"]; "\""; "")
-				$etags.push(New object:C1471("PartNumber"; $partNum; "ETag"; $etag))
-				
-				$percentile:=$bufferSizeUploaded/$fileSize
-				s3_progress_set($percentile)
-				
-			Else 
-				//NG
-				$FLG_ERROR:=True:C214
-				$i:=$sizeI+1
+				$FLG_SUCCESS:=True:C214
+				s3_progress_set(100)
 			End if 
 			
-		End for 
+		End if 
 		
-	End if 
-	
-	If (Not:C34($FLG_ERROR))
+	Else 
 		
-		$completeXml:="<CompleteMultipartUpload>"+\
-			$etags.map(Formula:C1597("<Part><PartNumber>"+String:C10($1.value.PartNumber)+"</PartNumber><ETag>"+$1.value.ETag+"</ETag></Part>")).join("")+\
-			"</CompleteMultipartUpload>"
-		
-		CONVERT FROM TEXT:C1011($completeXml; "utf-8"; $completeBlob)
-		
-		$queryString:="uploadId="+uriEncode($uploadId)
-		
-		//マルチパート完了
-		$request:=signedRequest($params; "POST"; $path; $completeBlob; $queryString; New object:C1471(\
-			"Content-Type"; "application/xml"; \
-			"Content-Length"; BLOB size:C605($completeBlob)))
+		//シングルパートアップロード
+		$request:=signedRequest($params; "PUT"; $path; $2; ""; New object:C1471("Content-Type"; $contentType))
 		
 		If ($request.response.status=200)
 			//OK
@@ -194,6 +212,7 @@ If (Count parameters:C259>=1)
 		End if 
 		
 	End if 
+	
 	
 	$result.success:=$FLG_SUCCESS
 	$result.request:=$request
