@@ -22,6 +22,7 @@
 			"convertDateStr",
 			"convertUtcToJst",
 			"delay",
+			"fixPartSize",
 			"getAmzDate",
 			"getAuthorizationHeader",
 			"getCanonical",

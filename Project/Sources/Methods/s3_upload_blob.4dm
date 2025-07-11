@@ -95,6 +95,7 @@ If (Count parameters:C259>=1)
 	If ($uploadId#"")
 		
 		$fileSize:=BLOB size:C605($2)
+		$partSize:=fixPartSize($partSize; $fileSize)  //S3 APIの制限に合わせて分割サイズを調整
 		
 		$count:=Trunc:C95($fileSize/$partSize; 0)
 		If (($fileSize%$partSize)>0)

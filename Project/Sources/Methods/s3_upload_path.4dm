@@ -99,6 +99,7 @@ If (Count parameters:C259>=2)
 		$docRef:=Open document:C264($documentPath; Read mode:K24:5)
 		
 		$fileSize:=Get document size:C479($docRef)
+		$partSize:=fixPartSize($partSize; $fileSize)  //S3 APIの制限に合わせて分割サイズを調整
 		
 		$count:=Trunc:C95($fileSize/$partSize; 0)
 		If (($fileSize%$partSize)>0)
