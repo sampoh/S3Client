@@ -103,7 +103,11 @@ If (Count parameters:C259>=1)
 			$partSize:=fixPartSize($partSize; $fileSize)  //S3 APIの制限に合わせて分割サイズを調整
 			
 			$count:=Trunc:C95($fileSize/$partSize; 0)
-			If (($fileSize%$partSize)>0)
+			//If (($fileSize%$partSize)>0)
+			//$count:=$count+1
+			//End if 
+			//不具合修正 - 2025/07/17 Y.Takahara
+			If ($fileSize>($partSize*$count))
 				$count:=$count+1
 			End if 
 			

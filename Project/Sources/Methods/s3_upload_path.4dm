@@ -104,11 +104,17 @@ If (Count parameters:C259>=2)
 			
 			$docRef:=Open document:C264($documentPath; Read mode:K24:5)
 			
+			SET DOCUMENT POSITION:C482($docRef; 0)
+			
 			//$fileSize:=Get document size($docRef)
 			$partSize:=fixPartSize($partSize; $fileSize)  //S3 APIの制限に合わせて分割サイズを調整
 			
 			$count:=Trunc:C95($fileSize/$partSize; 0)
-			If (($fileSize%$partSize)>0)
+			//If (($fileSize%$partSize)>0)
+			//$count:=$count+1
+			//End if 
+			//不具合修正 - 2025/07/17 Y.Takahara
+			If ($fileSize>($partSize*$count))
 				$count:=$count+1
 			End if 
 			
