@@ -2,9 +2,8 @@
 //< S3 APIでオブジェクト一覧取得 >
 
 //第1引数 ( 必須 ) : クライアントパラメータ 【 オブジェクト型 】
-//第2引数 ( 必須 ) : アップロードするBLOB 【 BLOB型 】
-//第3引数 ( 任意 ) : 検索プレフィックス 【 テキスト型 】 ( フォルダ指定などは "files/" のように指定可能 )
-//第4引数 ( 任意 ) : 継続トークン  【 テキスト型 】 ( 複数ページの場合に前回リクエストの結果にある nextContinuationToken を設定 )
+//第2引数 ( 任意 ) : 検索プレフィックス 【 テキスト型 】 ( フォルダ指定などは "files/" のように指定可能 )
+//第3引数 ( 任意 ) : 継続トークン  【 テキスト型 】 ( 複数ページの場合に前回リクエストの結果にある nextContinuationToken を設定 )
 //戻り値 : 結果オブジェクト 【 オブジェクト型 】
 
 //[ 戻り値の例 ]
@@ -45,12 +44,28 @@ If (Count parameters:C259>=1)
 	
 	$path:="/"+$params.bucket
 	
-	$queryString:=uriEncode("list-type")+"=2"
-	If ($prefix#"")
-		$queryString:=$queryString+"&prefix="+uriEncode($prefix)
-	End if 
+	//クエリパラメータはASCIIコード順にする必要があるため注意 ( continuation-token → list-type → prefix )
+	
+	$queryString:=""
+	
 	If ($continuationToken#"")
-		$queryString:=$queryString+"&"+uriEncode("continuation-token")+"="+uriEncode($continuationToken)
+		If ($queryString#"")
+			$queryString:=$queryString+"&"
+		End if 
+		//$queryString:=$queryString+uriEncode("continuation-token")+"="+uriEncode($continuationToken)
+		//↓不具合修正
+		$queryString:=$queryString+uriEncodeExceptSlash("continuation-token")+"="+uriEncodeExceptSlash($continuationToken)
+	End if 
+	
+	If ($queryString#"")
+		$queryString:=$queryString+"&"
+	End if 
+	$queryString:=$queryString+uriEncodeExceptSlash("list-type")+"=2"
+	
+	If ($prefix#"")
+		//$queryString:=$queryString+"&prefix="+uriEncode($prefix)
+		//↓不具合修正
+		$queryString:=$queryString+"&prefix="+uriEncodeExceptSlash($prefix)
 	End if 
 	
 	$request:=signedRequest($params; "GET"; $path; $emptyBlob; $queryString)

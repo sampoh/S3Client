@@ -16,7 +16,7 @@
 			"timeStamp": "2025-06-20T08:11:41Z"
 		},
 		"fixPartSize": {
-			"timeStamp": "2025-07-11T00:35:57Z"
+			"timeStamp": "2025-07-23T22:45:56Z"
 		},
 		"getAmzDate": {
 			"timeStamp": "2025-06-20T07:39:53Z"
@@ -91,7 +91,7 @@
 			}
 		},
 		"s3_list": {
-			"timeStamp": "2025-06-21T07:32:13Z",
+			"timeStamp": "2025-07-28T06:26:40Z",
 			"attributes": {
 				"shared": true
 			}
