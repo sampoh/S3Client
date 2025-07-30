@@ -68,7 +68,7 @@ If (Count parameters:C259>=1)
 			$end:=New collection:C1472(($offset+$partSize-1); ($fileSize-1)).min()
 			$rangeHeader:="bytes="+String:C10($start)+"-"+String:C10($end)
 			
-			$request:=signedRequest($params; "GET"; $path; $emptyBlob; ""; New object:C1471("Range"; $rangeHeader))
+			$request:=signedRequest($params; "GET"; $path; $emptyBlob; ""; ""; New object:C1471("Range"; $rangeHeader))
 			
 			If ($request.response.status=206)
 				COPY BLOB:C558($request.response.body; $fileBlob; 0; $offset; BLOB size:C605($request.response.body))

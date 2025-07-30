@@ -80,7 +80,7 @@ If (Count parameters:C259>=1)
 	If ($FLG_MULTIPART)
 		
 		//マルチパート開始宣言リクエスト
-		$request:=signedRequest($params; "POST"; $path; $emptyBlob; "uploads"; New object:C1471("Content-Type"; $contentType))
+		$request:=signedRequest($params; "POST"; $path; $emptyBlob; "uploads"; ""; New object:C1471("Content-Type"; $contentType))
 		
 		If ($request.response.status=200)
 			$resBody:=Convert to text:C1012($request.response.body; "UTF-8")
@@ -138,7 +138,7 @@ If (Count parameters:C259>=1)
 				Repeat 
 					
 					//マルチパートアップロード
-					$request:=signedRequest($params; "PUT"; $path; $buffer; $queryString; New object:C1471(\
+					$request:=signedRequest($params; "PUT"; $path; $buffer; $queryString; ""; New object:C1471(\
 						"Content-Length"; BLOB size:C605($buffer)))
 					
 					$NEXT_STEP:=Not:C34(isRetryHttpCode($request.response.status))
@@ -192,7 +192,7 @@ If (Count parameters:C259>=1)
 			$queryString:="uploadId="+uriEncode($uploadId)
 			
 			//マルチパート完了
-			$request:=signedRequest($params; "POST"; $path; $completeBlob; $queryString; New object:C1471(\
+			$request:=signedRequest($params; "POST"; $path; $completeBlob; $queryString; ""; New object:C1471(\
 				"Content-Type"; "application/xml"; \
 				"Content-Length"; BLOB size:C605($completeBlob)))
 			
@@ -207,7 +207,7 @@ If (Count parameters:C259>=1)
 	Else 
 		
 		//シングルパートアップロード
-		$request:=signedRequest($params; "PUT"; $path; $2; ""; New object:C1471("Content-Type"; $contentType))
+		$request:=signedRequest($params; "PUT"; $path; $2; ""; ""; New object:C1471("Content-Type"; $contentType))
 		
 		If ($request.response.status=200)
 			//OK

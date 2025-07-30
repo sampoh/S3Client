@@ -6,7 +6,8 @@ var $2; $METHOD : Text
 var $3; $path : Text
 var $4; $body : Blob
 var $5; $queryString : Text
-var $6; $extraHeaders : Object
+var $6; $nativeQueryString : Text
+var $7; $extraHeaders : Object
 
 var $amzOBJ : Object
 var $queryString : Text
@@ -29,7 +30,16 @@ If (Count parameters:C259>=5)
 End if 
 
 If (Count parameters:C259>=6)
-	$extraHeaders:=$6
+	$nativeQueryString:=$6
+Else 
+	$nativeQueryString:=""
+End if 
+If ($nativeQueryString="")
+	$nativeQueryString:=$queryString
+End if 
+
+If (Count parameters:C259>=7)
+	$extraHeaders:=$7
 Else 
 	$extraHeaders:=New object:C1471
 End if 
@@ -40,7 +50,7 @@ $amzOBJ:=getAmzDate
 //送信データのハッシュ
 $payloadHash:=SHA256($body; Crypto HEX)
 
-$authHeader:=getAuthorizationHeader($params; $METHOD; $path; $amzOBJ.amzDate; $amzOBJ.datestamp; $payloadHash; $queryString; $extraHeaders)
+$authHeader:=getAuthorizationHeader($params; $METHOD; $path; $amzOBJ.amzDate; $amzOBJ.datestamp; $payloadHash; $nativeQueryString; $extraHeaders)
 
 $headers:=New object:C1471
 $headers["Host"]:=$params.host

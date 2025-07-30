@@ -26,7 +26,7 @@ var $3; $continuationToken : Text
 var $path : Text
 var $request : Object
 var $emptyBlob : Blob
-var $queryString : Text
+var $queryString; $nativeQueryString : Text
 
 $result:=New object:C1471
 
@@ -47,28 +47,34 @@ If (Count parameters:C259>=1)
 	//クエリパラメータはASCIIコード順にする必要があるため注意 ( continuation-token → list-type → prefix )
 	
 	$queryString:=""
+	$nativeQueryString:=""
 	
 	If ($continuationToken#"")
 		If ($queryString#"")
 			$queryString:=$queryString+"&"
+			$nativeQueryString:=$nativeQueryString+"&"
 		End if 
 		//$queryString:=$queryString+uriEncode("continuation-token")+"="+uriEncode($continuationToken)
 		//↓不具合修正
 		$queryString:=$queryString+uriEncodeExceptSlash("continuation-token")+"="+uriEncodeExceptSlash($continuationToken)
+		$nativeQueryString:=$nativeQueryString+"continuation-token="+$continuationToken
 	End if 
 	
 	If ($queryString#"")
 		$queryString:=$queryString+"&"
+		$nativeQueryString:=$nativeQueryString+"&"
 	End if 
 	$queryString:=$queryString+uriEncodeExceptSlash("list-type")+"=2"
+	$nativeQueryString:=$nativeQueryString+"list-type=2"
 	
 	If ($prefix#"")
 		//$queryString:=$queryString+"&prefix="+uriEncode($prefix)
 		//↓不具合修正
 		$queryString:=$queryString+"&prefix="+uriEncodeExceptSlash($prefix)
+		$nativeQueryString:=$nativeQueryString+"&prefix="+$prefix
 	End if 
 	
-	$request:=signedRequest($params; "GET"; $path; $emptyBlob; $queryString)
+	$request:=signedRequest($params; "GET"; $path; $emptyBlob; $queryString; $nativeQueryString)
 	
 	$result.success:=($request.response.status=200)
 	$result.request:=$request

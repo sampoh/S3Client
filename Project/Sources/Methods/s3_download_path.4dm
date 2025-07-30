@@ -72,7 +72,7 @@ If (Count parameters:C259>=2)
 			$end:=New collection:C1472(($offset+$partSize-1); ($fileSize-1)).min()
 			$rangeHeader:="bytes="+String:C10($start)+"-"+String:C10($end)
 			
-			$request:=signedRequest($params; "GET"; $path; $emptyBlob; ""; New object:C1471("Range"; $rangeHeader))
+			$request:=signedRequest($params; "GET"; $path; $emptyBlob; ""; ""; New object:C1471("Range"; $rangeHeader))
 			
 			If ($request.response.status=206)
 				SEND PACKET:C103($docRef; $request.response.body)
